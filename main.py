@@ -310,7 +310,7 @@ class SentinelHubDownloader:
 
     @timer
     @try_tester
-    def download(self, polygon_coords: list[tuple[float, float]], resolution: int = 10):
+    def download(self, polygon_coords: list[tuple[float, float]], resolution: int = 10, output_folder: str = "output/SentinelHub"):
         polygon = Polygon(polygon_coords)
         minx, miny, maxx, maxy = polygon.bounds
         bbox = BBox(bbox=(minx, miny, maxx, maxy), crs=CRS.WGS84)
@@ -344,7 +344,7 @@ class SentinelHubDownloader:
         """
 
         request = SentinelHubRequest(
-            data_folder="output/SentinelHub",
+            data_folder=output_folder,
             evalscript=evalscript,
             input_data=[SentinelHubRequest.input_data(
                 DataCollection.SENTINEL2_L1C,
