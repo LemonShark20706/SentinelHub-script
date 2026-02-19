@@ -202,7 +202,6 @@ def try_tester(func):
             print(ConsolColor.PreSetUpColoredTextLine("Operation ended.", "info"))
     return wrapper
 
-
 class SentinelHubDownloader:
     __slots__ = ["config"]
 
@@ -237,6 +236,7 @@ class SentinelHubDownloader:
     def getSample(self) -> str:
         return ", ".join([f"sample.{b}" for b in self.getBands()])
 
+    @timer
     @try_tester
     def download(self, polygon_coords: list[tuple[float, float]], resolution: int = 10):
         polygon = Polygon(polygon_coords)
