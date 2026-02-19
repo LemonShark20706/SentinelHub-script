@@ -13,6 +13,8 @@ import tifffile as tiff
 import os
 
 class SentinelHubDownloader:
+    __slots__ = ["config"]
+
     def __init__(self):
         load_dotenv(".env")
         self.config = SHConfig()
