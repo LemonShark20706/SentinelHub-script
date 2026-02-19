@@ -229,12 +229,15 @@ class SentinelHubDownloader:
 
         return date(year, month, day)
 
+    @try_tester
     def getBands(self, bands: list[str] = ["B01","B02","B03","B04","B05","B06","B07", "B08","B8A","B09","B10","B11","B12"]) -> list[str]:
         return bands
-    
+
+    @try_tester
     def getSample(self) -> str:
         return ", ".join([f"sample.{b}" for b in self.getBands()])
 
+    @try_tester
     def download(self, polygon_coords: list[tuple[float, float]], resolution: int = 10):
         polygon = Polygon(polygon_coords)
         minx, miny, maxx, maxy = polygon.bounds
