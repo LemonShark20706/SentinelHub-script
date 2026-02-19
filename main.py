@@ -232,13 +232,14 @@ def try_tester(func):
     return wrapper
 
 class SentinelHubDownloader:
-    __slots__ = ["config"]
+    __slots__ = ["config", "bands"]
 
     def __init__(self):
         load_dotenv(".env")
         self.config = SHConfig()
         self.config.sh_client_id = os.getenv("SH_CLIENT_ID", "")
         self.config.sh_client_secret = os.getenv("SH_CLIENT_SECRET", "")
+        self.bands = self.ask_for_bands_parameters()
 
         if self.config.sh_client_id == "" or self.config.sh_client_secret == "":
             raise RuntimeError("Hiányzó Sentinel Hub hitelesítési adatok!")
@@ -257,8 +258,50 @@ class SentinelHubDownloader:
 
         return date(year, month, day)
 
+    def ask_for_bands_parameters(self) -> list[str]:
+        option_list: list[str] = ["B01","B02","B03","B04","B05","B06","B07", "B08","B8A","B09","B10","B11","B12"]
+        print(ConsolColor.PreSetUpColoredTextLine("What do you need from the list:", "s_color"))
+        for optionIndex in range(len(option_list)):
+            print(ConsolColor.PreSetUpColoredTextLine(f"\t{optionIndex+1})- {option_list[optionIndex]}", "s_color"))
+        print(ConsolColor.PreSetUpColoredTextLine("Type the numbers of the options you need separated by commas (e.g., 1,3,5) or type all if you need all. If you want to leave press enter.:", "s_color"))
+
+        try:
+            user_input: str = input(ConsolColor.PreSetUpColoredTextLine("?.: ", "s_color")).strip().lower()
+
+            if user_input.lower() == "all":
+                print(ConsolColor.PreSetUpColoredTextLine(f"Band parameters is selected. ({user_input})", "success"))
+                return option_list
+
+            if user_input == "":
+                raise ValueError("Parameters is empty.")
+        except ValueError as ve:
+            print(ConsolColor.PreSetUpColoredTextLine(f"Invalid input: {ve}", "danger"))
+            return ["B01","B02","B03","B04","B05","B06","B07", "B08","B8A","B09","B10","B11","B12"]
+
+        else:
+            try:
+                selected_options: list[str] = []
+                selected_indices: list[int] = [int(x.strip()) for x in user_input.split(",")]
+                for index in selected_indices:
+                    if 1 <= index <= len(option_list):
+                        selected_options.append(option_list[index - 1])
+                    else:
+                        raise ValueError("Invalid input. Please enter valid option numbers separated by commas, 'all', or press enter to leave:")
+            except ValueError as ve:
+                print(ConsolColor.PreSetUpColoredTextLine(f"Invalid input: {ve}", "danger"))
+                return ["B01","B02","B03","B04","B05","B06","B07", "B08","B8A","B09","B10","B11","B12"]
+
+            else:
+                print(ConsolColor.PreSetUpColoredTextLine(f"Successful band parameters selection. ({user_input})", "success"))
+                return selected_options
+
+        finally:
+            print(ConsolColor.PreSetUpColoredTextLine("Band parameters input attempt completed.", "info"))
+
     @try_tester
-    def getBands(self, bands: list[str] = ["B01","B02","B03","B04","B05","B06","B07", "B08","B8A","B09","B10","B11","B12"]) -> list[str]:
+    def getBands(self, bands: Optional[list[str]] = None):
+        if bands is None:
+            return self.bands
         return bands
 
     @try_tester
