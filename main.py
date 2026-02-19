@@ -13,4 +13,11 @@ import tifffile as tiff
 import os
 
 class SentinelHubDownloader:
-    pass
+    def __init__(self):
+        load_dotenv(".env")
+        self.config = SHConfig()
+        self.config.sh_client_id = os.getenv("SH_CLIENT_ID", "")
+        self.config.sh_client_secret = os.getenv("SH_CLIENT_SECRET", "")
+
+        if self.config.sh_client_id == "" or self.config.sh_client_secret == "":
+            raise RuntimeError("Hiányzó Sentinel Hub hitelesítési adatok!")
