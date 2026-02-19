@@ -72,3 +72,15 @@ class SentinelHubDownloader:
         )
 
         response = request.get_data(save_data=True)
+
+if __name__ == "__main__":
+    downloader = SentinelHubDownloader()
+    polygon_coords = [
+        (19.03, 47.47),
+        (19.10, 47.47),
+        (19.10, 47.52),
+        (19.03, 47.52),
+        (19.03, 47.47)
+    ]
+    tiff_path = downloader.download(polygon_coords)
+    print(f"Letöltött")
