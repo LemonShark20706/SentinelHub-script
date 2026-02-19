@@ -11,3 +11,6 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import tifffile as tiff 
 import os
+
+class SentinelHubDownloader:
+    pass
