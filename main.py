@@ -244,7 +244,7 @@ class SentinelHubDownloader:
             raise RuntimeError("Hiányzó Sentinel Hub hitelesítési adatok!")
 
     @try_tester
-    def ask_for_date() -> date:
+    def ask_for_date(self) -> date:
         year: int = int(input(ConsolColor.PreSetUpColoredTextLine("Enter year (e.g., 2026): ", "s_color")))
         month: int = int(input(ConsolColor.PreSetUpColoredTextLine("Enter month (1-12): ", "s_color")))
         day: int = int(input(ConsolColor.PreSetUpColoredTextLine(f"Enter day (1-{calendar.monthrange(year, month)[1]}): ", "s_color")))
@@ -303,7 +303,10 @@ class SentinelHubDownloader:
         request = SentinelHubRequest(
             data_folder="output/SentinelHub",
             evalscript=evalscript,
-            input_data=[SentinelHubRequest.input_data(DataCollection.SENTINEL2_L1C)],
+            input_data=[SentinelHubRequest.input_data(
+                DataCollection.SENTINEL2_L1C,
+                time_interval=(f"{self.ask_for_date()}", f"{self.ask_for_date()}"),
+                )],
             responses=[SentinelHubRequest.output_response("default", MimeType.TIFF)],
             bbox=bbox,
             size=size,
