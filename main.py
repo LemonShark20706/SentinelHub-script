@@ -11,6 +11,7 @@ from colorama import Style
 
 import matplotlib.pyplot as plt
 import tifffile as tiff
+import calendar
 import time
 import os
 
@@ -213,7 +214,21 @@ class SentinelHubDownloader:
 
         if self.config.sh_client_id == "" or self.config.sh_client_secret == "":
             raise RuntimeError("Hiányzó Sentinel Hub hitelesítési adatok!")
-    
+
+    @try_tester
+    def ask_for_date() -> date:
+        year: int = int(input(ConsolColor.PreSetUpColoredTextLine("Enter year (e.g., 2026): ", "s_color")))
+        month: int = int(input(ConsolColor.PreSetUpColoredTextLine("Enter month (1-12): ", "s_color")))
+        day: int = int(input(ConsolColor.PreSetUpColoredTextLine(f"Enter day (1-{calendar.monthrange(year, month)[1]}): ", "s_color")))
+
+        if month < 1 or month > 12:
+            raise ValueError("Month must be between 1 and 12.")
+
+        if day < 1 or day > calendar.monthrange(year, month)[1]:
+            raise ValueError(f"Day must be between 1 and {calendar.monthrange(year, month)[1]} for month {month}.")
+
+        return date(year, month, day)
+
     def getBands(self, bands: list[str] = ["B01","B02","B03","B04","B05","B06","B07", "B08","B8A","B09","B10","B11","B12"]) -> list[str]:
         return bands
     
