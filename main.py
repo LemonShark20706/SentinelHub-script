@@ -139,6 +139,35 @@ class ConsolColor:
         finalColorEnd = f"{Style.RESET_ALL}"
         return finalColorEnd   
 
+class coordinate:
+    __slots__ = ["_x", "_y"]
+
+    def __init__(self, longitude: Union[int, float], latitude: Union[int, float]) -> None:
+        self._x: Union[int, float] = longitude
+        self._y: Union[int, float] = latitude
+
+    @property
+    def longitude(self) -> Union[int, float]:
+        return self._x
+
+    @longitude.setter
+    def longitude(self, value: Union[int, float]):
+        self._x = value
+
+    @property
+    def latitude(self) -> Union[int, float]:
+        return self._y
+
+    @latitude.setter
+    def latitude(self, value: Union[int, float]):
+        self._y = value
+
+    def to_tuple(self) -> tuple[Union[int, float], Union[int, float]]:
+        return (self._x, self._y)
+
+    def __str__(self) -> str:
+        return f"{self._x},{self._y}"
+
 class date:
     __slots__ = ["_year", "_month", "_day"]
 
