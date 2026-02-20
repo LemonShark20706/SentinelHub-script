@@ -4,7 +4,6 @@ from sentinelhub.api.process import SentinelHubRequest
 from sentinelhub.config import SHConfig
 from sentinelhub.geometry import BBox
 from shapely.geometry import Polygon
-from typing import Union, Optional
 from dotenv import load_dotenv
 from datetime import datetime
 from colorama import Style
@@ -142,27 +141,29 @@ class ConsolColor:
 class coordinate:
     __slots__ = ["_x", "_y"]
 
-    def __init__(self, longitude: Union[int, float], latitude: Union[int, float]) -> None:
-        self._x: Union[int, float] = longitude
-        self._y: Union[int, float] = latitude
+    type coordinateType = int | float
+
+    def __init__(self, longitude: coordinateType, latitude: coordinateType) -> None:
+        self._x: coordinate.coordinateType = longitude
+        self._y: coordinate.coordinateType = latitude
 
     @property
-    def longitude(self) -> Union[int, float]:
+    def longitude(self) -> coordinateType:
         return self._x
 
     @longitude.setter
-    def longitude(self, value: Union[int, float]):
+    def longitude(self, value: coordinateType):
         self._x = value
 
     @property
-    def latitude(self) -> Union[int, float]:
+    def latitude(self) -> coordinateType:
         return self._y
 
     @latitude.setter
-    def latitude(self, value: Union[int, float]):
+    def latitude(self, value: coordinateType):
         self._y = value
 
-    def to_tuple(self) -> tuple[Union[int, float], Union[int, float]]:
+    def to_tuple(self) -> tuple[coordinateType, coordinateType]:
         return (self._x, self._y)
 
     def __str__(self) -> str:
@@ -299,7 +300,7 @@ class SentinelHubDownloader:
             print(ConsolColor.PreSetUpColoredTextLine("Band parameters input attempt completed.", "info"))
 
     @try_tester
-    def getBands(self, bands: Optional[list[str]] = None):
+    def getBands(self, bands: list[str] | None = None):
         if bands is None:
             return self.bands
         return bands
